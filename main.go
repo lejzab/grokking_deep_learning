@@ -2,53 +2,12 @@ package main
 
 import (
 	"fmt"
+	"grokking_neural_nets/pkg/utils"
 )
 
 func neuralNetwork(input, weights []float64) float64 {
-	prediction := weightedSum(input, weights)
+	prediction := utils.WeightedSum(input, weights)
 	return prediction
-}
-
-func weightedSum(a, b []float64) float64 {
-	if len(a) != len(b) {
-		panic("arrays must be of equal length")
-	}
-	sum := vectorSum(elementwiseMultiplication(a, b))
-	return sum
-}
-
-func elementwiseMultiplication(a, b []float64) []float64 {
-	if len(a) != len(b) {
-		panic("arrays must be of equal length")
-	}
-	c := make([]float64, len(a))
-	for i := 0; i < len(a); i++ {
-		c[i] = a[i] * b[i]
-	}
-	return c
-}
-
-func elementwiseAddition(a, b []float64) []float64 {
-	if len(a) != len(b) {
-		panic("arrays must be of equal length")
-	}
-	c := make([]float64, len(a))
-	for i := 0; i < len(a); i++ {
-		c[i] = a[i] + b[i]
-	}
-	return c
-}
-
-func vectorSum(a []float64) float64 {
-	sum := 0.0
-	for _, v := range a {
-		sum += v
-	}
-	return sum
-}
-
-func vectorAverage(a []float64) float64 {
-	return vectorSum(a) / float64(len(a))
 }
 
 func main() {

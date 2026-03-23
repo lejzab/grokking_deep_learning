@@ -1,52 +1,33 @@
 package main
 
 import (
+	"grokking_neural_nets/pkg/utils"
 	"testing"
 )
 
-func TestWeightedSum(t *testing.T) {
-	tests := []struct {
-		name     string
-		a        []float64
-		b        []float64
-		expected float64
-	}{
-		{
-			name:     "standard calculation",
-			a:        []float64{8.5, 0.65, 1.2},
-			b:        []float64{0.1, 0.2, 0},
-			expected: 0.98,
-		},
-		{
-			name:     "zeros",
-			a:        []float64{0, 0, 0},
-			b:        []float64{1, 2, 3},
-			expected: 0,
-		},
-		{
-			name:     "single element",
-			a:        []float64{10},
-			b:        []float64{0.5},
-			expected: 5.0,
-		},
-	}
+func TestNeuralNetwork(t *testing.T) {
+	weights := []float64{0.1, 0.2, 0}
+	input := []float64{8.5, 0.65, 1.2}
+	expected := 0.98
+
+	got := neuralNetwork(input, weights)
 
 	const epsilon = 1e-9
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := weightedSum(tt.a, tt.b)
-			if diff := got - tt.expected; diff < -epsilon || diff > epsilon {
-				t.Errorf("weightedSum() = %v, want %v", got, tt.expected)
-			}
-		})
+	if diff := got - expected; diff < -epsilon || diff > epsilon {
+		t.Errorf("neuralNetwork() = %v, want %v", got, expected)
 	}
 }
 
-func TestWeightedSumPanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("weightedSum should have panicked due to unequal lengths")
-		}
-	}()
-	weightedSum([]float64{1}, []float64{1, 2})
+func TestWeightedSum(t *testing.T) {
+	// Ten test teraz głównie sprawdza, czy integracja z utils działa
+	a := []float64{8.5, 0.65, 1.2}
+	b := []float64{0.1, 0.2, 0}
+	expected := 0.98
+
+	got := utils.WeightedSum(a, b)
+
+	const epsilon = 1e-9
+	if diff := got - expected; diff < -epsilon || diff > epsilon {
+		t.Errorf("utils.WeightedSum() = %v, want %v", got, expected)
+	}
 }
