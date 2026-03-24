@@ -1,7 +1,7 @@
 package main
 
 import (
-	"grokking_neural_nets/pkg/utils"
+	"grokking/pkg/utils"
 	"testing"
 )
 

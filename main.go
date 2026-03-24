@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"grokking_neural_nets/pkg/utils"
+	"grokking/pkg/utils"
 )
 
 func neuralNetwork(input, weights []float64) float64 {
