@@ -21,8 +21,7 @@
 *.swo
 
 # Project specific binaries
-grokking_deep_learning
-
+grokking
 
 # ai
 .junie
