@@ -1,3 +1,3 @@
-module grokking_neural_nets
+module grokking
 
 go 1.25
