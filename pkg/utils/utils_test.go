@@ -197,6 +197,11 @@ func TestVectorAverage(t *testing.T) {
 			a:        []float64{5},
 			expected: 5,
 		},
+		{
+			name:     "empty",
+			a:        []float64{},
+			expected: 0,
+		},
 	}
 
 	for _, tt := range tests {
@@ -225,6 +230,12 @@ func TestVectorMatrixMultiplication(t *testing.T) {
 				{0.0, 1.3, 0.1},
 			},
 			expected: []float64{0.555, 0.98, 0.965},
+		},
+		{
+			name:     "empty matrix",
+			vector:   []float64{1, 2, 3},
+			matrix:   [][]float64{},
+			expected: []float64{},
 		},
 	}
 

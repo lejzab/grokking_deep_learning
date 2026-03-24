@@ -1,6 +1,6 @@
-# AGEMTS
+# coding style
+Dodawaj do funkcji komentarze po polsku
 
-Ten plik zawiera informacje o agentach i systemach wspierających rozwój tego projektu do nauki sieci neuronowych.
+# tests
+Utrzymuj testy. Każda funkcje powinno byæ przetestowane
 
-## Cel
-Eksperymentowanie z implementacją sieci neuronowych w języku Go, korzystając z materiałów zawartych w [Grokking Deep Learning](https://edu.anarcho-copy.org/Algorithm/grokking-deep-learning.pdf).
