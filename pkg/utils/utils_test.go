@@ -208,3 +208,38 @@ func TestVectorAverage(t *testing.T) {
 		})
 	}
 }
+
+func TestVectorMatrixMultiplication(t *testing.T) {
+	tests := []struct {
+		name     string
+		vector   []float64
+		matrix   [][]float64
+		expected []float64
+	}{
+		{
+			name:   "standard 3x3",
+			vector: []float64{8.5, 0.65, 1.2},
+			matrix: [][]float64{
+				{0.1, 0.1, -0.3},
+				{0.1, 0.2, 0.0},
+				{0.0, 1.3, 0.1},
+			},
+			expected: []float64{0.555, 0.98, 0.965},
+		},
+	}
+
+	const epsilon = 1e-9
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := VectorMatrixMultiplication(tt.vector, tt.matrix)
+			if len(got) != len(tt.expected) {
+				t.Fatalf("length mismatch: got %d, want %d", len(got), len(tt.expected))
+			}
+			for i := range got {
+				if diff := got[i] - tt.expected[i]; diff < -epsilon || diff > epsilon {
+					t.Errorf("at index %d: got %v, want %v", i, got[i], tt.expected[i])
+				}
+			}
+		})
+	}
+}
