@@ -19,5 +19,4 @@ func main() {
 	inputSingle := wlRecord[0]
 	predSingle := neurals.SingleInputMultipleOutputs(inputSingle, weights)
 	fmt.Printf("%.3f\n", predSingle)
-
 }

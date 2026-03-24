@@ -87,6 +87,42 @@ func TestElementwiseMultiplication(t *testing.T) {
 	}
 }
 
+func TestElementwiseMultiplicationScalar(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    float64
+		weights  []float64
+		expected []float64
+	}{
+		{
+			name:     "standard",
+			input:    0.5,
+			weights:  []float64{1, 2, 3},
+			expected: []float64{0.5, 1, 1.5},
+		},
+		{
+			name:     "with zero scalar",
+			input:    0,
+			weights:  []float64{1, 2, 3},
+			expected: []float64{0, 0, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ElementwiseMultiplicationScalar(tt.input, tt.weights)
+			if len(got) != len(tt.expected) {
+				t.Fatalf("length mismatch: got %d, want %d", len(got), len(tt.expected))
+			}
+			for i := range got {
+				if got[i] != tt.expected[i] {
+					t.Errorf("at index %d: got %v, want %v", i, got[i], tt.expected[i])
+				}
+			}
+		})
+	}
+}
+
 func TestElementwiseAddition(t *testing.T) {
 	tests := []struct {
 		name     string
