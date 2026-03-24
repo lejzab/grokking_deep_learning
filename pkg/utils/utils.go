@@ -49,3 +49,14 @@ func VectorSum(a []float64) float64 {
 func VectorAverage(a []float64) float64 {
 	return VectorSum(a) / float64(len(a))
 }
+
+func VectorMatrixMultiplication(vector []float64, matrix [][]float64) []float64 {
+	if len(vector) != len(matrix) {
+		panic("vector and matrix dimensions must match")
+	}
+	result := make([]float64, len(matrix[0]))
+	for i := 0; i < len(vector); i++ {
+		result[i] = WeightedSum(vector, matrix[i])
+	}
+	return result
+}

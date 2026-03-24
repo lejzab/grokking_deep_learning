@@ -10,3 +10,8 @@ func MultipleInputsSingleOutput(input, weights []float64) float64 {
 func SingleInputMultipleOutputs(input float64, weights []float64) []float64 {
 	return utils.ElementwiseMultiplicationScalar(input, weights)
 }
+
+func MultipleInputsMultipleOutputs(inputs []float64, weights [][]float64) []float64 {
+	pred := utils.VectorMatrixMultiplication(inputs, weights)
+	return pred
+}
