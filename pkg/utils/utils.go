@@ -19,6 +19,14 @@ func ElementwiseMultiplication(a, b []float64) []float64 {
 	return c
 }
 
+func ElementwiseMultiplicationScalar(input float64, weights []float64) []float64 {
+	c := make([]float64, len(weights))
+	for i := 0; i < len(weights); i++ {
+		c[i] = weights[i] * input
+	}
+	return c
+}
+
 func ElementwiseAddition(a, b []float64) []float64 {
 	if len(a) != len(b) {
 		panic("arrays must be of equal length")
