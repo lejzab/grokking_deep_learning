@@ -1,4 +1,4 @@
-package utils
+package math
 
 import (
 	"testing"
@@ -34,7 +34,10 @@ func TestWeightedSum(t *testing.T) {
 	const epsilon = 1e-9
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := WeightedSum(tt.a, tt.b)
+			got, err := WeightedSum(tt.a, tt.b)
+			if err != nil {
+				t.Fatalf("WeightedSum() unexpected error: %v", err)
+			}
 			if diff := got - tt.expected; diff < -epsilon || diff > epsilon {
 				t.Errorf("WeightedSum() = %v, want %v", got, tt.expected)
 			}
@@ -42,13 +45,11 @@ func TestWeightedSum(t *testing.T) {
 	}
 }
 
-func TestWeightedSumPanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Errorf("WeightedSum should have panicked due to unequal lengths")
-		}
-	}()
-	WeightedSum([]float64{1}, []float64{1, 2})
+func TestWeightedSumError(t *testing.T) {
+	_, err := WeightedSum([]float64{1}, []float64{1, 2})
+	if err == nil {
+		t.Errorf("WeightedSum should have returned error due to unequal lengths")
+	}
 }
 
 func TestElementwiseMultiplication(t *testing.T) {
@@ -74,7 +75,10 @@ func TestElementwiseMultiplication(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ElementwiseMultiplication(tt.a, tt.b)
+			got, err := ElementwiseMultiplication(tt.a, tt.b)
+			if err != nil {
+				t.Fatalf("ElementwiseMultiplication() unexpected error: %v", err)
+			}
 			if len(got) != len(tt.expected) {
 				t.Fatalf("length mismatch: got %d, want %d", len(got), len(tt.expected))
 			}
@@ -140,7 +144,10 @@ func TestElementwiseAddition(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ElementwiseAddition(tt.a, tt.b)
+			got, err := ElementwiseAddition(tt.a, tt.b)
+			if err != nil {
+				t.Fatalf("ElementwiseAddition() unexpected error: %v", err)
+			}
 			if len(got) != len(tt.expected) {
 				t.Fatalf("length mismatch: got %d, want %d", len(got), len(tt.expected))
 			}
@@ -216,10 +223,11 @@ func TestVectorAverage(t *testing.T) {
 
 func TestVectorMatrixMultiplication(t *testing.T) {
 	tests := []struct {
-		name     string
-		vector   []float64
-		matrix   [][]float64
-		expected []float64
+		name        string
+		vector      []float64
+		matrix      [][]float64
+		expected    []float64
+		expectError bool
 	}{
 		{
 			name:   "standard 3x3",
@@ -229,20 +237,28 @@ func TestVectorMatrixMultiplication(t *testing.T) {
 				{0.1, 0.2, 0.0},
 				{0.0, 1.3, 0.1},
 			},
-			expected: []float64{0.555, 0.98, 0.965},
+			expected:    []float64{0.555, 0.98, 0.965},
+			expectError: false,
 		},
 		{
-			name:     "empty matrix",
-			vector:   []float64{1, 2, 3},
-			matrix:   [][]float64{},
-			expected: []float64{},
+			name:        "empty matrix",
+			vector:      []float64{1, 2, 3},
+			matrix:      [][]float64{},
+			expected:    nil,
+			expectError: true,
 		},
 	}
 
 	const epsilon = 1e-9
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := VectorMatrixMultiplication(tt.vector, tt.matrix)
+			got, err := VectorMatrixMultiplication(tt.vector, tt.matrix)
+			if (err != nil) != tt.expectError {
+				t.Fatalf("VectorMatrixMultiplication() error = %v, expectError %v", err, tt.expectError)
+			}
+			if tt.expectError {
+				return
+			}
 			if len(got) != len(tt.expected) {
 				t.Fatalf("length mismatch: got %d, want %d", len(got), len(tt.expected))
 			}

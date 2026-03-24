@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"grokking/neurals"
+	"grokking/internal/neurals"
 )
 
 func main() {
@@ -30,6 +30,10 @@ func main() {
 	numFans := []float64{1.2, 1.3, 0.5, 1.0}
 
 	input := []float64{toes[0], wlRecord[0], numFans[0]}
-	pred := neurals.MultipleInputsMultipleOutputs(input, weightsMatrx)
+	pred, err := neurals.MultipleInputsMultipleOutputs(input, weightsMatrx)
+	if err != nil {
+		fmt.Printf("Błąd: %v\n", err)
+		return
+	}
 	fmt.Printf("%.3f\n", pred)
 }

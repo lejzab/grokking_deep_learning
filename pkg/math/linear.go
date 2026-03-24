@@ -1,26 +1,32 @@
-package utils
+package math
+
+import "fmt"
 
 // WeightedSum oblicza sumę ważoną dwóch wektorów (iloczyn skalarny).
-// Oczekuje, że oba wektory mają taką samą długość, w przeciwnym razie wywołuje panic.
-func WeightedSum(a, b []float64) float64 {
+// Zwraca błąd, jeśli wektory mają różne długości.
+func WeightedSum(a, b []float64) (float64, error) {
 	if len(a) != len(b) {
-		panic("arrays must be of equal length")
+		return 0, fmt.Errorf("wektory muszą mieć taką samą długość: %d != %d", len(a), len(b))
 	}
-	sum := VectorSum(ElementwiseMultiplication(a, b))
-	return sum
+	res, err := ElementwiseMultiplication(a, b)
+	if err != nil {
+		return 0, err
+	}
+	sum := VectorSum(res)
+	return sum, nil
 }
 
 // ElementwiseMultiplication wykonuje mnożenie element po elemencie (iloczyn Hadamarda).
-// Oczekuje, że oba wektory mają taką samą długość, w przeciwnym razie wywołuje panic.
-func ElementwiseMultiplication(a, b []float64) []float64 {
+// Zwraca błąd, jeśli wektory mają różne długości.
+func ElementwiseMultiplication(a, b []float64) ([]float64, error) {
 	if len(a) != len(b) {
-		panic("arrays must be of equal length")
+		return nil, fmt.Errorf("wektory muszą mieć taką samą długość: %d != %d", len(a), len(b))
 	}
 	c := make([]float64, len(a))
 	for i := 0; i < len(a); i++ {
 		c[i] = a[i] * b[i]
 	}
-	return c
+	return c, nil
 }
 
 // ElementwiseMultiplicationScalar mnoży każdy element wektora przez skalar.
@@ -33,16 +39,16 @@ func ElementwiseMultiplicationScalar(input float64, weights []float64) []float64
 }
 
 // ElementwiseAddition dodaje do siebie dwa wektory element po elemencie.
-// Oczekuje, że oba wektory mają taką samą długość, w przeciwnym razie wywołuje panic.
-func ElementwiseAddition(a, b []float64) []float64 {
+// Zwraca błąd, jeśli wektory mają różne długości.
+func ElementwiseAddition(a, b []float64) ([]float64, error) {
 	if len(a) != len(b) {
-		panic("arrays must be of equal length")
+		return nil, fmt.Errorf("wektory muszą mieć taką samą długość: %d != %d", len(a), len(b))
 	}
 	c := make([]float64, len(a))
 	for i := 0; i < len(a); i++ {
 		c[i] = a[i] + b[i]
 	}
-	return c
+	return c, nil
 }
 
 // VectorSum sumuje wszystkie elementy w wektorze.
@@ -64,18 +70,22 @@ func VectorAverage(a []float64) float64 {
 }
 
 // VectorMatrixMultiplication wykonuje mnożenie wektora przez macierz.
-// Oczekuje, że długość wektora zgadza się z liczbą kolumn macierzy, w przeciwnym razie wywołuje panic.
-// Jeśli macierz jest pusta, zwraca pusty wektor.
-func VectorMatrixMultiplication(vector []float64, matrix [][]float64) []float64 {
+// Zwraca błąd, jeśli długość wektora nie zgadza się z liczbą kolumn macierzy
+// lub jeśli macierz jest pusta.
+func VectorMatrixMultiplication(vector []float64, matrix [][]float64) ([]float64, error) {
 	if len(matrix) == 0 {
-		return []float64{}
+		return nil, fmt.Errorf("macierz wag nie może być pusta")
 	}
 	if len(vector) != len(matrix[0]) {
-		panic("vector and matrix must have the same length")
+		return nil, fmt.Errorf("wektor i macierz muszą mieć zgodne wymiary: len(vector)=%d, len(matrix[0])=%d", len(vector), len(matrix[0]))
 	}
 	result := make([]float64, len(matrix))
 	for i := 0; i < len(matrix); i++ {
-		result[i] = WeightedSum(vector, matrix[i])
+		val, err := WeightedSum(vector, matrix[i])
+		if err != nil {
+			return nil, err
+		}
+		result[i] = val
 	}
-	return result
+	return result, nil
 }

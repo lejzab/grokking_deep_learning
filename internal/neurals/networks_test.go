@@ -9,7 +9,10 @@ func TestMultipleInputsSingleOutput(t *testing.T) {
 	input := []float64{8.5, 0.65, 1.2}
 	expected := 0.98
 
-	got := MultipleInputsSingleOutput(input, weights)
+	got, err := MultipleInputsSingleOutput(input, weights)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
 
 	const epsilon = 1e-9
 	if diff := got - expected; diff < -epsilon || diff > epsilon {
@@ -45,7 +48,10 @@ func TestMultipleInputsMultipleOutputs(t *testing.T) {
 	input := []float64{8.5, 0.65, 1.2}
 	expected := []float64{0.555, 0.98, 0.965}
 
-	got := MultipleInputsMultipleOutputs(input, weights)
+	got, err := MultipleInputsMultipleOutputs(input, weights)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
 
 	if len(got) != len(expected) {
 		t.Fatalf("MultipleInputsMultipleOutputs() returned %d elements, want %d", len(got), len(expected))

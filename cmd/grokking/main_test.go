@@ -1,7 +1,7 @@
 package main
 
 import (
-	"grokking/neurals"
+	"grokking/internal/neurals"
 	"testing"
 )
 
@@ -10,7 +10,10 @@ func TestIntegration(t *testing.T) {
 	input := []float64{8.5, 0.65, 1.2}
 	expected := 0.98
 
-	got := neurals.MultipleInputsSingleOutput(input, weights)
+	got, err := neurals.MultipleInputsSingleOutput(input, weights)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
 
 	const epsilon = 1e-9
 	if diff := got - expected; diff < -epsilon || diff > epsilon {
@@ -46,7 +49,10 @@ func TestIntegrationMultipleInputsMultipleOutputs(t *testing.T) {
 	input := []float64{8.5, 0.65, 1.2}
 	expected := []float64{0.555, 0.98, 0.965}
 
-	got := neurals.MultipleInputsMultipleOutputs(input, weightsMatrx)
+	got, err := neurals.MultipleInputsMultipleOutputs(input, weightsMatrx)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
 
 	if len(got) != len(expected) {
 		t.Fatalf("MultipleInputsMultipleOutputs() returned %d elements, want %d", len(got), len(expected))
